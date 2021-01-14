@@ -1,2 +1,4 @@
-# machine-learning
-Repo for Machine Learning class of Computer Engineering at CEFET-MG
+# Machine Learning
+Repo for Machine Learning class of Computer Engineering at CEFET-MG. 
+
+
