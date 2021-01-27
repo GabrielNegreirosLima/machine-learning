@@ -4,8 +4,9 @@ Instale o python, jupyter notebook e o instalador de pacotes python (se necessar
 	apt-get install python3 jupyter python3-pip
 
 Instale os modulos Python necessários
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 
+* caso o pip3 não funcione, tente pip
 *Não é recomendavel usar sudo no pip.
 
 
