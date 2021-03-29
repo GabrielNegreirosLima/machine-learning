@@ -4,6 +4,7 @@ from base_am.resultado import Fold, Resultado
 from competicao_am.metodo_competicao import MetodoCompeticaoHierarquico
 import optuna
 from sklearn.svm import LinearSVC
+from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 
 
@@ -36,6 +37,19 @@ class OtimizacaoObjetivoRandomForestCompeticao(OtimizacaoObjetivo):
         n_estimators = trial.suggest_int('n_estimators', 64, 128)
 
         scikit_method = RandomForestClassifier(random_state=2, class_weight='balanced', n_estimators=n_estimators)
+
+        return MetodoCompeticaoHierarquico(scikit_method, "grouped_genre")
+
+    def resultado_metrica_otimizacao(self,resultado: Resultado) -> float:
+        return resultado.macro_f1
+   
+    
+class OtimizacaoObjetivoNaiveBayesCompeticao(OtimizacaoObjetivo):
+    def __init__(self, fold:Fold):
+        super().__init__(fold)
+
+    def obtem_metodo(self,trial: optuna.Trial)->MetodoAprendizadoDeMaquina:
+        scikit_method = GaussianNB()
 
         return MetodoCompeticaoHierarquico(scikit_method, "grouped_genre")
 
