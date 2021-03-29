@@ -25,3 +25,19 @@ class OtimizacaoObjetivoSVMCompeticao(OtimizacaoObjetivo):
 
     def resultado_metrica_otimizacao(self,resultado: Resultado) -> float:
         return resultado.macro_f1
+
+class OtimizacaoObjetivoRandomForestCompeticao(OtimizacaoObjetivo):
+    def __init__(self, fold:Fold, num_arvores_max:int=5):
+        super().__init__(fold)
+        self.num_arvores_max = num_arvores_max
+
+    def obtem_metodo(self,trial: optuna.Trial)->MetodoAprendizadoDeMaquina:
+        # https://www.researchgate.net/publication/230766603_How_Many_Trees_in_a_Random_Forest
+        n_estimators = trial.suggest_int('n_estimators', 64, 128)
+
+        scikit_method = RandomForestClassifier(random_state=2, class_weight='balanced', n_estimators=n_estimators)
+
+        return MetodoCompeticaoHierarquico(scikit_method, "grouped_genre")
+
+    def resultado_metrica_otimizacao(self,resultado: Resultado) -> float:
+        return resultado.macro_f1

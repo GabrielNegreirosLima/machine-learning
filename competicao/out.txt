@@ -1,0 +1,85 @@
+[I 2021-03-29 02:44:39,158] A new study created in memory with name: no-name-d173e3eb-41dc-4222-800a-90deccb42c37
+[I 2021-03-29 02:44:47,784] Trial 0 finished with value: 0.706811047158333 and parameters: {'n_estimators': 101}. Best is trial 0 with value: 0.706811047158333.
+[I 2021-03-29 02:44:53,997] Trial 1 finished with value: 0.697754749568221 and parameters: {'n_estimators': 76}. Best is trial 0 with value: 0.706811047158333.
+[I 2021-03-29 02:44:59,880] Trial 2 finished with value: 0.6945898778359512 and parameters: {'n_estimators': 73}. Best is trial 0 with value: 0.706811047158333.
+[I 2021-03-29 02:45:05,533] Trial 3 finished with value: 0.6994444317428382 and parameters: {'n_estimators': 69}. Best is trial 0 with value: 0.706811047158333.
+[I 2021-03-29 02:45:15,201] Trial 4 finished with value: 0.7045509329994657 and parameters: {'n_estimators': 128}. Best is trial 0 with value: 0.706811047158333.
+0.697397073258792
+[I 2021-03-29 02:45:33,247] A new study created in memory with name: no-name-aca7f89e-fbca-42b3-b81c-5f6449fa0230
+[I 2021-03-29 02:45:34,125] Trial 0 finished with value: 0.6757658102766799 and parameters: {'exp_cost': 0.2770157843063934}. Best is trial 0 with value: 0.6757658102766799.
+[I 2021-03-29 02:45:35,011] Trial 1 finished with value: 0.6729271993977102 and parameters: {'exp_cost': 0.5587806341330127}. Best is trial 0 with value: 0.6757658102766799.
+[I 2021-03-29 02:45:35,903] Trial 2 finished with value: 0.6670074286103728 and parameters: {'exp_cost': 1.0366821811291431}. Best is trial 0 with value: 0.6757658102766799.
+[I 2021-03-29 02:45:36,789] Trial 3 finished with value: 0.6678773600340304 and parameters: {'exp_cost': 1.1903024226920098}. Best is trial 0 with value: 0.6757658102766799.
+[I 2021-03-29 02:45:37,692] Trial 4 finished with value: 0.6658471207387552 and parameters: {'exp_cost': 1.6164502020100708}. Best is trial 0 with value: 0.6757658102766799.
+0.7025898078529658
+Melhor Macro F1 RandomForest: 0.697397073258792
+Melhor Macro F1 SVM: 0.7025898078529658
+=========== RandomForest ===========
+====== Resultado primeiro Nivel ====
+Macro F1: 0.697397073258792
+[[434. 202.]
+ [245. 619.]]
+{0: 'Country_n_Folk', 1: 'Rock_n_Metal'}
+              precision    recall  f1-score   support
+
+           0       0.64      0.68      0.66       636
+           1       0.75      0.72      0.73       864
+
+    accuracy                           0.70      1500
+   macro avg       0.70      0.70      0.70      1500
+weighted avg       0.71      0.70      0.70      1500
+
+
+
+====== Resultado segundo nivel =====
+Macro F1: 0.5003100252593587
+[[ 86.  60.  48.  37.]
+ [ 68. 196.  97.  62.]
+ [ 74.  87. 226.  18.]
+ [ 71.  95.   9. 266.]]
+{0: 'Folk', 1: 'Rock', 2: 'Country', 3: 'Metal'}
+              precision    recall  f1-score   support
+
+           0       0.29      0.37      0.32       231
+           1       0.45      0.46      0.46       423
+           2       0.59      0.56      0.58       405
+           3       0.69      0.60      0.65       441
+
+    accuracy                           0.52      1500
+   macro avg       0.51      0.50      0.50      1500
+weighted avg       0.54      0.52      0.52      1500
+
+=============== SVM ================
+====== Resultado primeiro Nivel ====
+Macro F1: 0.7025898078529658
+[[490. 146.]
+ [299. 565.]]
+{0: 'Country_n_Folk', 1: 'Rock_n_Metal'}
+              precision    recall  f1-score   support
+
+           0       0.62      0.77      0.69       636
+           1       0.79      0.65      0.72       864
+
+    accuracy                           0.70      1500
+   macro avg       0.71      0.71      0.70      1500
+weighted avg       0.72      0.70      0.70      1500
+
+
+
+====== Resultado segundo nivel =====
+Macro F1: 0.5160730492533547
+[[108.  50.  45.  28.]
+ [ 90. 168. 101.  64.]
+ [ 90.  56. 247.  12.]
+ [ 87.  63.  21. 270.]]
+{0: 'Folk', 1: 'Rock', 2: 'Country', 3: 'Metal'}
+              precision    recall  f1-score   support
+
+           0       0.29      0.47      0.36       231
+           1       0.50      0.40      0.44       423
+           2       0.60      0.61      0.60       405
+           3       0.72      0.61      0.66       441
+
+    accuracy                           0.53      1500
+   macro avg       0.53      0.52      0.52      1500
+weighted avg       0.56      0.53      0.54      1500
