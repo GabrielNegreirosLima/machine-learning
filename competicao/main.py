@@ -19,8 +19,10 @@ df_lyrics.drop("id",axis=1)
 
 
 # separa em treino e validacao
-arr_folds = Fold.gerar_k_folds(df_lyrics, val_k=2, col_classe=col_classe, num_repeticoes=1, num_folds_validacao=2, num_repeticoes_validacao=1)
-arr_folds = [arr_folds[0]] # queremos estudar a princípio somente um fold, para ser mais rápido
+df_treino = df_lyrics.sample(frac=0.8,random_state=2)
+df_validacao = df_lyrics.drop(df_treino.index)
+fold = Fold(df_treino, df_validacao, col_classe=col_classe, num_folds_validacao=2, num_repeticoes_validacao=1)
+arr_folds = [fold]
 
 
 
