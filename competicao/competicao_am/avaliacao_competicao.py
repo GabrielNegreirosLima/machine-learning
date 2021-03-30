@@ -4,8 +4,7 @@ from base_am.resultado import Fold, Resultado
 from competicao_am.metodo_competicao import MetodoCompeticaoHierarquico
 import optuna
 from sklearn.svm import LinearSVC
-from sklearn.naive_bayes import GaussianNB
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 
 class OtimizacaoObjetivoSVMCompeticao(OtimizacaoObjetivo):
@@ -42,14 +41,18 @@ class OtimizacaoObjetivoRandomForestCompeticao(OtimizacaoObjetivo):
 
     def resultado_metrica_otimizacao(self,resultado: Resultado) -> float:
         return resultado.macro_f1
-   
-    
-class OtimizacaoObjetivoNaiveBayesCompeticao(OtimizacaoObjetivo):
-    def __init__(self, fold:Fold):
+
+class OtimizacaoObjetivoGradientBoostCompeticao(OtimizacaoObjetivo):
+    def __init__(self, fold:Fold, num_arvores_max:int=5):
         super().__init__(fold)
+        self.num_arvores_max = num_arvores_max
 
     def obtem_metodo(self,trial: optuna.Trial)->MetodoAprendizadoDeMaquina:
-        scikit_method = GaussianNB()
+        # https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
+        min_samples_split = trial.suggest_int('min_samples_split', 25, 50) # 0.5 ~ 1% de instâncias totais
+        n_estimators = trial.suggest_int('n_estimators', 40, 70)
+
+        scikit_method = GradientBoostingClassifier(random_state=2, min_samples_split=min_samples_split, n_estimators=n_estimators)
 
         return MetodoCompeticaoHierarquico(scikit_method, "grouped_genre")
 
