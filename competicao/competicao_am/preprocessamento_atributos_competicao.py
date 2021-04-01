@@ -1,6 +1,11 @@
 import pandas as pd
 from base_am.preprocessamento_atributos import BagOfWords, BagOfItems
 from sklearn.feature_extraction.text import TfidfVectorizer
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+import re
 
 def gerar_atributos_letra_musica(df_treino:pd.DataFrame, df_data_to_predict: pd.DataFrame, max_df:float) -> pd.DataFrame:
     bow_amostra = BagOfWordsLyrics(max_df)
@@ -9,9 +14,56 @@ def gerar_atributos_letra_musica(df_treino:pd.DataFrame, df_data_to_predict: pd.
 
     return df_bow_treino,df_bow_data_to_predict
 
-# extraido da lib nltk (stopwords)
-#stop_list = {'almost', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"}
-stop_list = {"i","he","she","it","a","the","almost","do","does"}
+lem = WordNetLemmatizer()
+def lem_tokenizer(lyrics, to_lower = True, only_alphanum = True):
+    tokens = lyrics
+    
+    # tokenize only if not tokenized
+    if isinstance(lyrics, str):
+        tokens = word_tokenize(lyrics)
+    
+    # process tokens: lower case > clamp to alphanum > lemmatize
+    processed_tokens = []
+    for i, tk in enumerate(tokens):
+        if to_lower:
+            tk = tk.lower()
+
+        if only_alphanum:
+            tk = re.sub(r'\W+', '', tk)
+
+        if tk == '':
+            continue
+
+        processed_tokens.append(lem.lemmatize(tk))
+    pos_tags = nltk.pos_tag(tokens)
+
+    return processed_tokens, pos_tags
+
+def preprocessar_dataframe(df: pd.DataFrame):
+    df_preprocessado = []
+
+    for row in df.values:
+        lyrics = row[-1]
+
+        # pular instancia caso nao tenha letra
+        if not isinstance(lyrics, str):
+            continue
+
+        tokens, pos_tags = lem_tokenizer(lyrics)
+
+        # reconstruir letra
+        processed_lyrics = ''
+        for tk in tokens:
+            processed_lyrics += tk + ' '
+        
+        # reconstruir dataframe
+        df_preprocessado.append(list(row[:-1]) + [str(processed_lyrics)])
+    
+    return pd.DataFrame(df_preprocessado, columns=list(df.columns))
+
+stop_list = lem_tokenizer(["i","he","she","it","a","the","almost","do","does"])[0]
+#stop_list = lem_tokenizer(stopwords.words('english'))[0]
+#stop_list = lem_tokenizer(stopwords.words('english') + stopwords.words('german') + stopwords.words('spanish'))[0]
 class BagOfWordsLyrics(BagOfWords):
     def __init__(self, max_df:float):
         #O TfidfVectorizer que é resposavel por gerar a representação BOW
