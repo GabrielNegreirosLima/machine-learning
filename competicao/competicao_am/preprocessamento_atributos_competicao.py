@@ -34,7 +34,8 @@ def lem_tokenizer(lyrics, to_lower = True, only_alphanum = True):
         if tk == '':
             continue
 
-        processed_tokens.append(lem.lemmatize(tk))
+        #processed_tokens.append(lem.lemmatize(tk))
+        processed_tokens.append(tk)
     pos_tags = nltk.pos_tag(tokens)
 
     return processed_tokens, pos_tags
